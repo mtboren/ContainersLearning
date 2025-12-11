@@ -37,6 +37,7 @@ Covered things like
             mysql:8.0
         ```
 - watch/follow container logs: `docker logs --follow my_cool_webapp`
+- and, `docker compose` for using a Compose file to define the containers, volumes, etc.
 - container stop/removal via PowerShell pipeline, without forcing: `docker stop my_cool_webapp | Foreach-Object {docker rm $_}`
 - one take on container layout:
     > In general, each container should do one thing and do it well
