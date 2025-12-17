@@ -1,10 +1,12 @@
 # Some Fargate Learning Activities
 From the AWS-provided tutorial https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_AWSCLI_Fargate.html
 
-## Some Details, Commands
-Some of the things from the walkthrough
+Matt ended up defining the prerequisite roles and the likes in a CFN template in this directory, and included some deployment code.
 
-- Register task definition using JSON file: `aws ecs register-task-definition --cli-input-json file://fargateTaskDefinition.json --task-role-arn ((Get-CFNStack -StackName $strCFNStackName).Outputs | where OutputKey -eq TaskRoleArn).OutputValue --profile $StoredAWSCredentials`
+## Some Details, Commands
+Some of the things from the walkthrough.
+
+- Register task definition using JSON file (where `$strCFNStackName` is the pre-reqs stack deployed from the CFN template in this directory): `aws ecs register-task-definition --cli-input-json file://fargateTaskDefinition.json --task-role-arn ((Get-CFNStack -StackName $strCFNStackName).Outputs | where OutputKey -eq TaskRoleArn).OutputValue --profile $StoredAWSCredentials`
 - Create a Service in a private subnet:
     ```PowerShell
     aws ecs create-service --cluster fargate-cluster --service-name cool-fargate-service --task-definition coolguy-fargate:1 --desired-count 1 --launch-type "FARGATE" --network-configuration ("awsvpcConfiguration={{subnets=[{0}],securityGroups=[{1}]}}" -f (($arrSomeSubnets = Get-EC2Subnet -Filter @{Name = "tag:Type"; Values = "Private"}).SubnetId -join ','), (Get-EC2SecurityGroup -Filter @{Name = "group-name"; Values = "default"}, @{Name = "vpc-id"; Values = $arrSomeSubnets.VpcId}).GroupId) --enable-execute-command
