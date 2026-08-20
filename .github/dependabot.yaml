@@ -1,7 +1,7 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: "npm" ## for npm and yarn things
+    directory: "/**"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
